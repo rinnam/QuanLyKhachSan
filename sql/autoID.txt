@@ -1,0 +1,144 @@
+CREATE PROCEDURE InsertChiTietHoaDonDichVu
+    @maHDDV CHAR(8),
+    @maDV CHAR(10),
+    @giaDV FLOAT,
+    @soluong INT,
+	@thanhtien FLOAT
+AS
+BEGIN
+    DECLARE @id INT, @maCTHDDV CHAR(8);
+
+    SET @maCTHDDV = 'CTDV000'; -- temporary value
+
+    INSERT INTO ChiTietHoaDonDichVu (maHDDV, maDV, giaDV, soluong, thanhtien, maCTHDDV)
+    VALUES (@maHDDV, @maDV, @giaDV, @soluong, @thanhtien,  @maCTHDDV);
+
+    SET @id = SCOPE_IDENTITY();
+    SET @maCTHDDV = 'CTDV' + RIGHT('000' + CAST(@id AS VARCHAR(3)), 3);
+
+    UPDATE ChiTietHoaDonDichVu
+    SET maCTHDDV = @maCTHDDV
+    WHERE id = @id;
+END;
+
+CREATE PROCEDURE InsertPhieuThue
+    @maKH CHAR(10),
+    @maphong CHAR(10),
+    @maNV CHAR(10),
+    @ngayden DATETIME,
+    @ngaydi DATETIME,
+    @hinhthuc NVARCHAR(10)
+AS
+BEGIN
+    DECLARE @id INT, @maPT CHAR(6);
+
+	SET @maPT = 'PT000';
+
+    INSERT INTO PhieuThue (maKH, maphong, maNV, ngayden, ngaydi, hinhthuc, maPT)
+    VALUES (@maKH, @maphong, @maNV, @ngayden, @ngaydi, @hinhthuc, @maPT);
+
+    SET @id = SCOPE_IDENTITY();
+    SET @maPT = 'PT' + RIGHT('000' + CAST(@id AS VARCHAR(3)), 3);
+
+    UPDATE PhieuThue
+    SET maPT = @maPT
+    WHERE id = @id;
+END;
+
+CREATE PROCEDURE InsertKhachHang
+	@hoten NVARCHAR(100),
+    @sdt NVARCHAR(15),
+    @cccd NVARCHAR(20),
+    @diachi NVARCHAR(255),
+    @gioitinh NVARCHAR(10)
+AS
+BEGIN
+    DECLARE @id INT, @maKH CHAR(7);
+
+	SET @maKH ='KH000';
+
+    -- Chèn dữ liệu và lấy giá trị id tự động tăng
+    INSERT INTO KhachHang (hoten, sdt, cccd, diachi, gioitinh, maKH)
+    VALUES (@hoten, @sdt, @cccd, @diachi, @gioitinh, @maKH);
+
+    SET @id = SCOPE_IDENTITY();
+
+    -- Tạo mã khách hàng với định dạng KHxxx
+    SET @maKH = 'KH' + RIGHT('000' + CAST(@id AS VARCHAR(3)), 3);
+
+    -- Cập nhật lại mã khách hàng
+    UPDATE KhachHang
+    SET maKH = @maKH
+    WHERE id = @id;
+END;
+
+CREATE PROCEDURE InsertHoaDonDichVu
+	@maKH CHAR(10),
+    @maNV CHAR(10),
+    @tongTienDV FLOAT
+AS
+BEGIN
+    DECLARE @id INT, @maHDDV CHAR(8);
+
+    SET @maHDDV = 'HDDV000'; -- temporary value
+
+    INSERT INTO HoaDonDichVu (maKH, maNV, tongTienDV, maHDDV)
+    VALUES (@maKH, @maNV, @tongTienDV, @maHDDV);
+
+    SET @id = SCOPE_IDENTITY();
+    SET @maHDDV = 'HDDV' + RIGHT('000' + CAST(@id AS VARCHAR(3)), 3);
+
+    UPDATE HoaDonDichVu
+    SET maHDDV = @maHDDV
+    WHERE id = @id;
+END;
+
+CREATE PROCEDURE InsertHoaDon
+    @maNV CHAR(10),
+    @maKH CHAR(10),
+    @maPT CHAR(6),
+    @maHDDV CHAR(6),
+    @tongTien FLOAT,
+    @tinhtrangTT NVARCHAR(10)
+AS
+BEGIN
+    DECLARE @id INT, @maHD CHAR(6);
+
+	SET @maHD ='HD000';
+
+    INSERT INTO HoaDon (maNV, maKH, maPT, maHDDV, tongTien, tinhtrangTT, maHD)
+    VALUES (@maNV, @maKH, @maPT, @maHDDV, @tongTien, @tinhtrangTT, @maHD);
+
+    SET @id = SCOPE_IDENTITY();
+    SET @maHD = 'HD' + RIGHT('000' + CAST(@id AS VARCHAR(3)), 3);
+
+    UPDATE HoaDon
+    SET maHD = @maHD
+    WHERE id = @id;
+END;
+
+CREATE PROCEDURE InsertDichVu
+    @tenDV NVARCHAR(100),
+    @donvitinh NVARCHAR(50),
+    @giaDV FLOAT
+AS
+BEGIN
+    DECLARE @id INT, @maDV CHAR(6);
+
+	SET @maDV = 'DV000';
+
+    -- Chèn dữ liệu vào bảng DichVu
+    INSERT INTO DichVu (tenDV, donvitinh, giaDV, maDV)
+    VALUES (@tenDV, @donvitinh, @giaDV, @maDV);
+
+    -- Lấy giá trị ID tự động tăng
+    SET @id = SCOPE_IDENTITY();
+
+    -- Tạo mã dịch vụ với định dạng DVxxx
+    SET @maDV = 'DV' + RIGHT('000' + CAST(@id AS VARCHAR(3)), 3);
+
+    -- Cập nhật lại mã dịch vụ trong bảng
+    UPDATE DichVu
+    SET maDV = @maDV
+    WHERE id = @id;
+END;

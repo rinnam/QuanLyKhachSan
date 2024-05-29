@@ -1,0 +1,106 @@
+﻿CREATE TABLE KhachHang (
+    maKH CHAR(10) PRIMARY KEY,
+    hoten NVARCHAR(100) NOT NULL,
+    sdt NVARCHAR(15) UNIQUE,
+    cccd NVARCHAR(20) UNIQUE,
+    diachi NVARCHAR(255),
+    gioitinh NVARCHAR(10),
+	id INT IDENTITY(1,1),
+);
+
+CREATE TABLE Phong (
+    maphong CHAR(10) PRIMARY KEY,
+    loaiphong NVARCHAR(50) NOT NULL,
+    hangphong NVARCHAR(50) NOT NULL,
+    gia1giodau DECIMAL(10, 2) NOT NULL,
+    giacacgiosau DECIMAL(10, 2) NOT NULL,
+    giatheongay DECIMAL(10, 2) NOT NULL,
+    tinhtrang NVARCHAR(50) NOT NULL
+);
+
+CREATE TABLE NhanVien (
+    maNV CHAR(10) PRIMARY KEY,
+    ten NVARCHAR(100) NOT NULL,
+    taikhoan NVARCHAR(100) UNIQUE NOT NULL,
+    matkhau NVARCHAR(100) NOT NULL,
+    quyenhan NVARCHAR(20),
+    trangthai NVARCHAR(20)
+);
+
+CREATE TABLE PhieuThue (
+    maPT CHAR(10) PRIMARY KEY,
+	maNV CHAR(10) NOT NULL,
+    maKH CHAR(10) NOT NULL,
+    maphong CHAR(10) NOT NULL,
+    ngayden DATETIME NOT NULL,
+    ngaydi DATETIME,
+    hinhthuc NVARCHAR(10),
+	tinhtien DECIMAL(10, 2),
+	id INT IDENTITY(1,1)
+    FOREIGN KEY (maKH) REFERENCES KhachHang(maKH),
+    FOREIGN KEY (maphong) REFERENCES Phong(maphong),
+    FOREIGN KEY (maNV) REFERENCES NhanVien(maNV)
+);
+
+CREATE TABLE DichVu (
+    maDV CHAR(10) PRIMARY KEY,
+    tenDV NVARCHAR(100) NOT NULL,
+    donvitinh NVARCHAR(50) NOT NULL,
+    giaDV DECIMAL(10, 2) NOT NULL,
+	id INT IDENTITY(1,1),
+);
+
+CREATE TABLE HoaDonDichVu (
+    maHDDV CHAR(10) PRIMARY KEY,
+    maKH CHAR(10) NOT NULL,
+    maNV CHAR(10) NOT NULL,
+    tongTienDV DECIMAL(10, 2) NOT NULL,
+	id INT IDENTITY(1,1),
+    FOREIGN KEY (maKH) REFERENCES KhachHang(maKH),
+    FOREIGN KEY (maNV) REFERENCES NhanVien(maNV)
+);
+
+CREATE TABLE HoaDon (
+    maHD CHAR(10) PRIMARY KEY,
+    maNV CHAR(10) NOT NULL,
+    maKH CHAR(10) NOT NULL,
+    maPT CHAR(10) NOT NULL,
+    maHDDV CHAR(10),
+    tongTien DECIMAL(10, 2) NOT NULL,
+    tinhtrangTT NVARCHAR(10) NOT NULL,
+	id INT IDENTITY(1,1),
+    FOREIGN KEY (maKH) REFERENCES KhachHang(maKH),
+    FOREIGN KEY (maPT) REFERENCES PhieuThue(maPT),
+    FOREIGN KEY (maHDDV) REFERENCES HoaDonDichVu(maHDDV),
+    FOREIGN KEY (maNV) REFERENCES NhanVien(maNV)
+);
+
+CREATE TABLE ChiTietHoaDonDichVu (
+    maCTHDDV CHAR(10) PRIMARY KEY,
+    maHDDV CHAR(10) NOT NULL,
+    maDV CHAR(10) NOT NULL,
+    giaDV DECIMAL(10, 2) NOT NULL,
+    soluong INT NOT NULL,
+    thanhtien DECIMAL(10, 2) ,
+	id INT IDENTITY(1,1)
+    FOREIGN KEY (maDV) REFERENCES DichVu(maDV),
+    FOREIGN KEY (maHDDV) REFERENCES HoaDonDichVu(maHDDV)
+);
+CREATE TABLE TaiKhoanNganHang (
+	maNH CHAR(10) PRIMARY KEY,
+	tenNH NVARCHAR(100) NOT NULL,
+	tenTK NVARCHAR(100) NOT NULL,
+	soTK NVARCHAR(20) NOT NULL,
+	binNH NVARCHAR(15) NOT NULL,
+);
+
+
+
+	
+
+
+
+
+
+
+
